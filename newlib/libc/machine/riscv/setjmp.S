@@ -51,6 +51,20 @@ setjmp:
 	FREG_S fs9, 14*SZREG+ 9*SZFREG(a0)
 	FREG_S fs10,14*SZREG+10*SZFREG(a0)
 	FREG_S fs11,14*SZREG+11*SZFREG(a0)
+#ifdef __riscv_xpac
+	/* Save PAC register pr0 - automatic PAC computed on call */
+	pac.store pr0, 14*SZREG+12*SZFREG(a0)
+#endif
+#else
+#ifdef __riscv_xpac
+#ifndef __riscv_32e
+	/* Save PAC register pr0 - automatic PAC computed on call */
+	pac.store pr0, 14*SZREG(a0)
+#else
+	/* Save PAC register pr0 - automatic PAC computed on call */
+	pac.store pr0, 4*SZREG(a0)
+#endif
+#endif
 #endif
 
 	li    a0, 0
@@ -94,6 +108,20 @@ longjmp:
 	FREG_L fs9, 14*SZREG+ 9*SZFREG(a0)
 	FREG_L fs10,14*SZREG+10*SZFREG(a0)
 	FREG_L fs11,14*SZREG+11*SZFREG(a0)
+#ifdef __riscv_xpac
+	/* Load PAC register pr0 - saved by setjmp */
+	pac.load pr0, 14*SZREG+12*SZFREG(a0)
+#endif
+#else
+#ifdef __riscv_xpac
+#ifndef __riscv_32e
+	/* Load PAC register pr0 - saved by setjmp */
+	pac.load pr0, 14*SZREG(a0)
+#else
+	/* Load PAC register pr0 - saved by setjmp */
+	pac.load pr0, 4*SZREG(a0)
+#endif
+#endif
 #endif
 
 	seqz a0, a1

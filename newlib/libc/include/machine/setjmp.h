@@ -434,10 +434,16 @@ _BEGIN_STD_C
 /* _JBTYPE using long long to make sure the alignment is align to 8 byte,
    otherwise in rv32imafd, store/restore FPR may mis-align.  */
 #define _JBTYPE long long
-#ifdef __riscv_32e
-#define _JBLEN ((4*sizeof(long))/sizeof(long))
+#ifdef __riscv_xpac
+/* Add 8 bytes for PAC register pr0 */
+#define _JBLEN_PAC (8/sizeof(long))
 #else
-#define _JBLEN ((14*sizeof(long) + 12*sizeof(double))/sizeof(long))
+#define _JBLEN_PAC 0
+#endif
+#ifdef __riscv_32e
+#define _JBLEN ((4*sizeof(long))/sizeof(long) + _JBLEN_PAC)
+#else
+#define _JBLEN ((14*sizeof(long) + 12*sizeof(double))/sizeof(long) + _JBLEN_PAC)
 #endif
 #endif
 
