@@ -18,6 +18,9 @@
   .globl  setjmp
   .type   setjmp, @function
 setjmp:
+#ifdef __riscv_zicfilp
+	auipc x0, 0  /* lpad 0 - Zicfilp landing pad */
+#endif
 	REG_S ra,  0*SZREG(a0)
 	REG_S s0,  1*SZREG(a0)
 	REG_S s1,  2*SZREG(a0)
@@ -76,6 +79,7 @@ setjmp:
   .globl  longjmp
   .type   longjmp, @function
 longjmp:
+	auipc x0, 0  /* lpad 0 - Zicfilp landing pad */
 	REG_L ra,  0*SZREG(a0)
 	REG_L s0,  1*SZREG(a0)
 	REG_L s1,  2*SZREG(a0)

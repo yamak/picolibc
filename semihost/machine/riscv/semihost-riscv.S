@@ -40,6 +40,9 @@
         .option push
         .option norvc
 sys_semihost:
+#ifdef __riscv_zicfilp
+        auipc x0, 0  /* lpad 0 - Zicfilp landing pad */
+#endif
         slli zero, zero, 0x1f
         ebreak
         srai zero, zero, 0x7

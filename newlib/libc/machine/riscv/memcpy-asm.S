@@ -16,6 +16,9 @@
 .global memcpy
 .type	memcpy, @function
 memcpy:
+#ifdef __riscv_zicfilp
+  auipc x0, 0  /* lpad 0 - Zicfilp landing pad */
+#endif
   mv t1, a0
   beqz a2, 2f
 

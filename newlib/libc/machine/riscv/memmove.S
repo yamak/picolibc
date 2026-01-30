@@ -16,6 +16,9 @@
 .global memmove
 .type	memmove, @function
 memmove:
+#ifdef __riscv_zicfilp
+  auipc x0, 0  /* lpad 0 - Zicfilp landing pad */
+#endif
   beqz a2, 2f
 
   mv t1, a0

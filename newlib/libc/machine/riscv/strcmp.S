@@ -17,6 +17,9 @@
 .globl strcmp
 .type  strcmp, @function
 strcmp:
+#ifdef __riscv_zicfilp
+	auipc x0, 0  /* lpad 0 - Zicfilp landing pad */
+#endif
 #if defined(__PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
 1:
   lbu   a2, 0(a0)
